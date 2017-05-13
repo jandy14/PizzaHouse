@@ -1,5 +1,6 @@
-// typedef struct _Order Order;
-// typedef struct _Pizza Pizza;
+#ifndef __LIST_H__
+#define __LIST_H__
+
 typedef struct _Node Node;
 typedef struct _Node List;
 
@@ -14,4 +15,8 @@ Node* NewList();
 void* Pop(Node* head);
 int Size(Node* head);
 int Insert(Node* head, void* item, int index);
+void* ObserveItem(Node* head, int index);
 void DeleteList(Node* head);
+
+#endif
+//asdgfsag
