@@ -39,7 +39,7 @@ Order* PhaseTextToOrder(char* pBuf)
 	item->num = atoi(strtok(pBuf," "));
 	item->arrivalTime = HourToSec(strtok(NULL," "));
 	item->type = TextToOrderType(strtok(NULL," "));
-
+	item->state = BeforeOrder;
 	List* pizzaList = NewList();
 	int serviceTime = 0;
 	while(1)

@@ -7,8 +7,15 @@
 
 typedef enum
 {
+	FCFS = 0,
+	SJF,
+	RR
+}Scheduling;
+
+typedef enum
+{
 	PHONE = 0,	//phoning order
-	VISIT,	//visiting order
+	VISIT,		//visiting order
 	ORDERTYPECOUNT	//it just for count
 }OrderType;
 
@@ -64,27 +71,31 @@ struct _Order
 	List* pizzaList;	//ordered pizza array
 	int serviceTime;	//It is calculated by pizzaList
 	int timer;			//progress time
+	OrderState state;	//order's current state
 };
 
 struct _Worker
 {
-	Order* progressingOrder;	//order in process
-	int remainingTime;			//remaining time to the end this work
+	Order* progressingOrder;//order in process
+	int remainingTime;		//remaining time to the end this work
 };
 
 struct _PizzaMaker
 {
-	Pizza* progressingPizza;	//pizza in process
+	Pizza* progressingPizza;//pizza in process
 	List* workQue;			//pizza list to make
-	int remainingTime;			//remaining time to the end this work
+	int remainingTime;		//remaining time to the end this work
 };
 
 struct _PizzaHouse
 {
+	int quantum;
+	Scheduling scheduling;
+
+	List* orderList;	//all order list
 	int currentTime;
 	int nextEventTime;
-	int elapsedTime;
-	List* OrderList;		//order array
+	int elapsedTime;	//time difference between previous and current event
 
 	Worker orderReceiver;
 	Worker calculater;
@@ -94,9 +105,12 @@ struct _PizzaHouse
 	List* orderQue;
 	List* calculateQue;
 	List* preparationQue;
-	List* makingPizzaQue;
+	List* makingPizzaQue;	//pizza's list
 	List* waitingPizzaQue;
 	List* deliveryQue;
 };
 
+PizzaHouse* PizzaHouseOpen(List* orderList, int quantum, Scheduling scheduling);
+void RefreshWorker(Worker* target);
+void RefreshPizzaMaker(PizzaMaker* target, int isAllClear);
 #endif
