@@ -121,6 +121,7 @@ void ReceiveOrder(PizzaHouse* pPH)
 	if(Size(pPH->orderQue) != 0 && pPH->orderReceiver.progressingOrder == NULL) //worker remain job.
 	{
 		pPH->orderReceiver.progressingOrder = (Order*)Pop(pPH->orderQue);
+		++(pPH->orderReceiver.progressingOrder->state);
 		if(pPH->orderReceiver.progressingOrder->type == VISIT)
 		{
 			pPH->orderReceiver.remainingTime = VISIT_ORDER_TIME;
@@ -157,8 +158,96 @@ void CalculateOrder(PizzaHouse* pPH)
 	if(Size(pPH->calculateQue) != 0 && pPH->calculater.progressingOrder == NULL)
 	{
 		pPH->calculater.progressingOrder = (Order*)Pop(pPH->calculateQue);
+		++(pPH->calculater.progressingOrder->state);
 		pPH->calculater.remainingTime = CALCULATE_TIME;
 		FindNextEventTime(pPH, CALCULATE_TIME);
 	}
+	return;
+}
+void MakePizza(PizzaHouse* pPH)
+{
+	if(pPH->scheduling == RR)
+		DistributeWork(pPH);
+	int i;
+	for(i = 0; i < PIZZA_MAKER_AMOUNT; i++)
+	{
+		if(pPH->pizzaMaker[i].progressingPizza)
+		{
+			pPH->pizzaMaker[i].progressingPizza->remainingTime -= pPH->elapsedTime;
+			pPH->pizzaMaker[i].remainingTime -= pPH->elapsedTime;
+
+			if(pPH->pizzaMaker[i].remainingTime == 0)
+			{
+				if(pPH->pizzaMaker[i].progressingPizza->remainingTime == 0)
+				{
+					RefreshPizzaMaker(&(pPH->pizzaMaker[i]),0);
+				}
+				else
+				{
+					Insert(pPH->pizzaMaker[i].workQue,(void*)pPH->pizzaMaker[i].progressingPizza,Size(pPH->pizzaMaker[i].workQue));
+				}
+			}
+			else
+				FindNextEventTime(pPH, pPH->pizzaMaker[i].remainingTime);
+		}
+		if(pPH->scheduling == RR)
+		{
+			if(Size(pPH->pizzaMaker[i].workQue) == 0 || pPH->pizzaMaker[i].progressingPizza != NULL)
+				continue;
+			pPH->pizzaMaker[i].progressingPizza = (Pizza*)Pop(pPH->pizzaMaker[i].workQue);
+			if(pPH->quantum > pPH->pizzaMaker[i].progressingPizza->remainingTime)
+				pPH->pizzaMaker[i].remainingTime = pPH->pizzaMaker[i].progressingPizza->remainingTime;
+			else
+				pPH->pizzaMaker[i].remainingTime = pPH->quantum;
+			FindNextEventTime(pPH, pPH->pizzaMaker[i].remainingTime);
+		}
+		else
+		{
+			if(pPH->pizzaMaker[i].progressingPizza == NULL)
+			{
+				if(Size(pPH->makingPizzaQue) == 0)
+				{
+					if(Size(pPH->preparationQue) == 0)
+						continue;
+					else
+						ReadyPizza((Order*)Pop(pPH->preparationQue), pPH->makingPizzaQue, pPH->waitingPizzaQue);
+				}
+				pPH->pizzaMaker[i].progressingPizza = (Pizza*)Pop(pPH->makingPizzaQue);
+				pPH->pizzaMaker[i].remainingTime = pPH->pizzaMaker[i].progressingPizza->remainingTime;
+				FindNextEventTime(pPH, pPH->pizzaMaker[i].remainingTime);
+			}
+		}
+	}
+	return;
+}
+void DistributeWork(PizzaHouse* pPH)
+{
+	static int index = 0;
+	while(1)
+	{
+		Order* item;
+		if((item = (Order*)Pop(pPH->preparationQue)) == NULL)
+			break;
+		ReadyPizza(item, pPH->makingPizzaQue, pPH->waitingPizzaQue);
+	}
+
+	while(1)
+	{
+		Pizza* item = (Pizza*)Pop(pPH->makingPizzaQue);
+		if(item == NULL)
+			break;
+		Insert(pPH->pizzaMaker[index].workQue, (void*)item, Size(pPH->pizzaMaker[index].workQue));
+		++index;
+		if(index == PIZZA_MAKER_AMOUNT)
+			index = 0;
+	}
+	return;
+}
+void ReadyPizza(Order* pOrder, List* pPizzaList ,List* pNextQue)
+{
+	int i;
+	for(i = 0; i < Size(pOrder->pizzaList); ++i)
+		Insert(pPizzaList, ObserveItem(pOrder->pizzaList, i), Size(pPizzaList));
+	GoNextQue(pOrder, pNextQue, FCFS);
 	return;
 }

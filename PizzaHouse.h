@@ -124,4 +124,7 @@ void FindNextEventTime(PizzaHouse* pizzaHouse, int nextEventTime);
 void OrderStart(PizzaHouse* pizzaHouse);
 void ReceiveOrder(PizzaHouse* pizzaHouse);
 void CalculateOrder(PizzaHouse* pizzaHouse);
+void MakePizza(PizzaHouse* pizzaHouse);
+void DistributeWork(PizzaHouse* pizzaHouse);
+void ReadyPizza(Order* order,List* pizzaList, List* nextQue);
 #endif
