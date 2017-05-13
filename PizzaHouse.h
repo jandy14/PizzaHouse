@@ -3,7 +3,10 @@
 
 #include "List.h"
 
-#define PIZZAMAKERAMOUNT 5
+#define PIZZA_MAKER_AMOUNT 5
+#define VISIT_ORDER_TIME 5
+#define PHONE_ORDER_TIME 3
+#define CALCULATE_TIME 5
 
 typedef enum
 {
@@ -100,7 +103,7 @@ struct _PizzaHouse
 	Worker orderReceiver;
 	Worker calculater;
 	Worker deliveryStaff;
-	PizzaMaker pizzaMaker[PIZZAMAKERAMOUNT];
+	PizzaMaker pizzaMaker[PIZZA_MAKER_AMOUNT];
 
 	List* orderQue;
 	List* calculateQue;
@@ -108,9 +111,17 @@ struct _PizzaHouse
 	List* makingPizzaQue;	//pizza's list
 	List* waitingPizzaQue;
 	List* deliveryQue;
+
+	int orderCount;
+	int completeCount;
 };
 
 PizzaHouse* PizzaHouseOpen(List* orderList, int quantum, Scheduling scheduling);
 void RefreshWorker(Worker* target);
 void RefreshPizzaMaker(PizzaMaker* target, int isAllClear);
+void GoNextQue(Order* order, List* destinationQue, Scheduling scheduling);
+void FindNextEventTime(PizzaHouse* pizzaHouse, int nextEventTime);
+void OrderStart(PizzaHouse* pizzaHouse);
+void ReceiveOrder(PizzaHouse* pizzaHouse);
+void CalculateOrder(PizzaHouse* pizzaHouse);
 #endif
