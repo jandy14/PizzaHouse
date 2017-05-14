@@ -139,5 +139,6 @@ void FreeOrderMemory(Order* order);
 void Delivery(PizzaHouse* pizzaHouse);
 BOOL PizzaHouseRun(PizzaHouse* pizzaHouse);
 BOOL IsAllOrderClear(PizzaHouse* pizzaHouse);
+void PizzaHouseClose(PizzaHouse* pizzaHouse);
 
 #endif

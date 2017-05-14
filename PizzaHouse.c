@@ -424,5 +424,7 @@ void PizzaHouseClose(PizzaHouse* pPH)
 	DeleteList(pPH->waitingPizzaQue);
 	DeleteList(pPH->deliveryQue);
 
+	free(pPH);
+
 	return;
 }
