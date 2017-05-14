@@ -76,23 +76,38 @@ void FindNextEventTime(PizzaHouse* pPH, int pTime)
 		pPH->nextEventTime = pTime;
 	else if(pPH->nextEventTime > pTime)
 		pPH->nextEventTime = pTime;
+
+	//printf("%d vs %d\n", pPH->nextEventTime, pTime);
+
+	return;
 }
 void OrderStart(PizzaHouse* pPH)
 {
-	if(Size(pPH->orderQue) == 0) //order over
+	if(Size(pPH->orderList) == 0) //order over
 		return;
 	while(1)
 	{
-		if(((Order*)ObserveItem(pPH->orderQue,0))->arrivalTime == pPH->currentTime) //start order!
-			GoNextQue((Order*)Pop(pPH->orderQue),pPH->orderQue,pPH->scheduling);
-		else if(((Order*)ObserveItem(pPH->orderQue,0))->arrivalTime < pPH->currentTime) // fatal error!
+		if(((Order*)ObserveItem(pPH->orderList,0))->arrivalTime == pPH->currentTime) //start order!
+		{
+			//printf("orderlist size : %d\n",Size(pPH->orderList));
+			//printf("pop!\n");
+			Order* order = (Order*)Pop(pPH->orderList);
+			//PrintOrder(order,pPH->currentTime,1);
+			GoNextQue(order,pPH->orderQue,pPH->scheduling);
+			//printf("orderlist size : %d\n",Size(pPH->orderList));
+			if(Size(pPH->orderList) == 0)
+				break;
+		}
+		else if(((Order*)ObserveItem(pPH->orderList,0))->arrivalTime < pPH->currentTime) // fatal error!
 		{
 			printf("arrivalTime < currenttime in OrderStart Error\n");
+			printf("%d vs %d\n",((Order*)ObserveItem(pPH->orderList,0))->arrivalTime, pPH->currentTime);
 			break;
 		}
 		else //order over in this time
 		{
-			FindNextEventTime(pPH, ((Order*)ObserveItem(pPH->orderQue,0))->arrivalTime - pPH->currentTime);
+			//printf("hi\n");
+			FindNextEventTime(pPH, ((Order*)ObserveItem(pPH->orderList,0))->arrivalTime - pPH->currentTime);
 			break;
 		}
 	}
@@ -168,6 +183,7 @@ void MakePizza(PizzaHouse* pPH)
 {
 	if(pPH->scheduling == RR)
 		DistributeWork(pPH);
+	//printf("Go\n");
 	int i;
 	for(i = 0; i < PIZZA_MAKER_AMOUNT; i++)
 	{
@@ -185,6 +201,7 @@ void MakePizza(PizzaHouse* pPH)
 				else
 				{
 					Insert(pPH->pizzaMaker[i].workQue,(void*)pPH->pizzaMaker[i].progressingPizza,Size(pPH->pizzaMaker[i].workQue));
+					RefreshPizzaMaker(&(pPH->pizzaMaker[i]),0);
 				}
 			}
 			else
@@ -269,9 +286,9 @@ void PrintOrder(Order* pOrder, int pCurrentTime, int pIsTest)
 
 	printf("%02d:%02d ",pOrder->arrivalTime/(60*60),(pOrder->arrivalTime/60)%60);
 	if(pOrder->type == VISIT)
-		printf("visiting\t");
+		printf("visiting ");
 	else
-		printf("phone\t");
+		printf("phone    ");
 	printf("%-4d ",pOrder->serviceTime);
 	printf("%-4d ",pCurrentTime - pOrder->arrivalTime);
 
@@ -396,13 +413,21 @@ BOOL PizzaHouseRun(PizzaHouse* pPH)
 	pPH->currentTime += pPH->elapsedTime;
 	pPH->nextEventTime = -1;
 
+	//printf("next : %d\n", pPH->nextEventTime);
 	OrderStart(pPH);
+	//printf("next : %d\n", pPH->nextEventTime);
 	ReceiveOrder(pPH);
+	//printf("next : %d\n", pPH->nextEventTime);
 	CalculateOrder(pPH);
+	//printf("next : %d\n", pPH->nextEventTime);
 	MakePizza(pPH);
+	//printf("next : %d\n", pPH->nextEventTime);
 	CheckCompletedOrder(pPH);
+	//printf("next : %d\n", pPH->nextEventTime);
 	Delivery(pPH);
+	//printf("next : %d\n", pPH->nextEventTime);
 
+	//getc(stdin);
 	return !(IsAllOrderClear(pPH));
 }
 BOOL IsAllOrderClear(PizzaHouse* pPH)
