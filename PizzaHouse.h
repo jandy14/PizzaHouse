@@ -7,6 +7,13 @@
 #define VISIT_ORDER_TIME 5
 #define PHONE_ORDER_TIME 3
 #define CALCULATE_TIME 5
+#define DELIVERY_TIME 200
+
+typedef enum
+{
+	FALSE = 0,
+	TRUE
+}BOOL;
 
 typedef enum
 {
@@ -73,7 +80,6 @@ struct _Order
 	OrderType type;		//is phone or visit
 	List* pizzaList;	//ordered pizza array
 	int serviceTime;	//It is calculated by pizzaList
-	int timer;			//progress time
 	OrderState state;	//order's current state
 };
 
@@ -127,4 +133,11 @@ void CalculateOrder(PizzaHouse* pizzaHouse);
 void MakePizza(PizzaHouse* pizzaHouse);
 void DistributeWork(PizzaHouse* pizzaHouse);
 void ReadyPizza(Order* order,List* pizzaList, List* nextQue);
+void PrintOrder(Order* order, int currentTime, int isTest);
+void CheckCompletedOrder(PizzaHouse* pizzaHouse);
+void FreeOrderMemory(Order* order);
+void Delivery(PizzaHouse* pizzaHouse);
+BOOL PizzaHouseRun(PizzaHouse* pizzaHouse);
+BOOL IsAllOrderClear(PizzaHouse* pizzaHouse);
+
 #endif

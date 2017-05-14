@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "List.h"
 
@@ -74,22 +73,23 @@ int Insert(Node* pHead, void* pItem, int pIndex)
 
 void* ObserveItem(Node* pHead, int pIndex)
 {
-	//printf("HI\n");
+
 	Node* iter = pHead;
 	int i;
 	if(pIndex < 0 || pIndex >= Size(pHead))
 		return NULL;
-	//printf("HI\n");
+
 	for(i = 0; i <= pIndex; ++i)
 		iter = iter->next;
-	//printf("HI\n");
+
 	return iter->item;
 }
 
 void DeleteList(Node* pHead)
 {
 	Node* iter;
-
+	if(pHead == NULL)
+		return;
 	if(pHead->next == NULL)
 	{
 		free(pHead);

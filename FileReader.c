@@ -56,7 +56,6 @@ Order* PhaseTextToOrder(char* pBuf)
 	}
 	item->pizzaList = pizzaList;
 	item->serviceTime = serviceTime;
-	item->timer = 0;
 
 	return item;
 }

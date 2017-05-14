@@ -251,3 +251,178 @@ void ReadyPizza(Order* pOrder, List* pPizzaList ,List* pNextQue)
 	GoNextQue(pOrder, pNextQue, FCFS);
 	return;
 }
+void PrintOrder(Order* pOrder, int pCurrentTime, int pIsTest)
+{
+	static int num = 1;
+	static int testNum = 1;
+
+	if(pIsTest)
+	{
+		printf("T%-2d ", testNum);
+		++testNum;
+	}
+	else
+	{
+		printf(" %-2d ", num);
+		++num;
+	}
+
+	printf("%02d:%02d ",pOrder->arrivalTime/(60*60),(pOrder->arrivalTime/60)%60);
+	if(pOrder->type == VISIT)
+		printf("visiting\t");
+	else
+		printf("phone\t");
+	printf("%-4d ",pOrder->serviceTime);
+	printf("%-4d ",pCurrentTime - pOrder->arrivalTime);
+
+	if(pIsTest)
+	{
+		switch(pOrder->state)
+		{
+		case BeforeOrder:
+			printf("BeforeOrder");
+			break;
+		case WaitingToOrdered:
+			printf("WaitingToOrdered");
+			break;
+		case Ordering:
+			printf("Ordering");
+			break;
+		case WaitingToCalculated:
+			printf("WaitingToCalculated");
+			break;
+		case Calculating:
+			printf("Calculating");
+			break;
+		case WaitingToMaked:
+			printf("WaitingToMaked");
+			break;
+		case WaitingPizza:
+			printf("WaitingPizza");
+			break;
+		case WaitingToDelivered:
+			printf("WaitingToDelivered");
+			break;
+		case Delivering:
+			printf("Delivering");
+			break;
+		case Complete:
+			printf("Complete");
+			break;
+		default:
+			printf("STATE ERROR");
+		}
+	}
+	printf("\n");
+	return;
+}
+void CheckCompletedOrder(PizzaHouse* pPH)
+{
+	int listSize = Size(pPH->waitingPizzaQue);
+	int i,j;
+
+	for(i = 0; i < listSize; ++i)
+	{
+		int isAllComplete = 1;
+		//Order* order = (Order*)ObserveItem(pPH->waitingPizzaQue,i);
+		Order* order = (Order*)Pop(pPH->waitingPizzaQue);
+		int pizzaListSize = Size(order->pizzaList);
+		for(j = 0; j < pizzaListSize; ++j)
+		{
+			Pizza* pizza = (Pizza*)ObserveItem(order->pizzaList,j);
+			if(pizza->remainingTime)
+			{
+				isAllComplete = 0;
+				break;
+			}
+		}
+		if(isAllComplete)
+		{
+			if(order->type == VISIT)
+			{
+				order->state = Complete;
+				PrintOrder(order,pPH->currentTime,0);
+				FreeOrderMemory(order);
+				++(pPH->completeCount);
+			}
+			else
+				GoNextQue(order, pPH->deliveryQue, FCFS);
+		}
+		else
+			Insert(pPH->waitingPizzaQue,(void*)order,Size(pPH->waitingPizzaQue));
+	}
+}
+void FreeOrderMemory(Order* pOrder)
+{
+	DeleteList(pOrder->pizzaList);
+	free(pOrder);
+}
+void Delivery(PizzaHouse* pPH)
+{
+	if(pPH->deliveryStaff.progressingOrder)
+	{
+		pPH->deliveryStaff.remainingTime -= pPH->elapsedTime;
+		if(pPH->deliveryStaff.remainingTime == 0)
+		{
+			PrintOrder(pPH->deliveryStaff.progressingOrder,pPH->currentTime,0);
+			FreeOrderMemory(pPH->deliveryStaff.progressingOrder);
+			++(pPH->completeCount);
+			RefreshWorker(&(pPH->deliveryStaff));
+		}
+		else if(pPH->deliveryStaff.remainingTime < 0) //fatal error
+		{
+			printf("deliveryStaff remainingtime is minus!\n");
+			return;
+		}
+		else
+		{
+			FindNextEventTime(pPH, pPH->deliveryStaff.remainingTime);
+		}
+	}
+	if(Size(pPH->deliveryQue) != 0 && pPH->deliveryStaff.progressingOrder == NULL)
+	{
+		pPH->deliveryStaff.progressingOrder = (Order*)Pop(pPH->deliveryQue);
+		++(pPH->deliveryStaff.progressingOrder->state);
+		pPH->deliveryStaff.remainingTime = DELIVERY_TIME;
+		FindNextEventTime(pPH, DELIVERY_TIME);
+	}
+}
+BOOL PizzaHouseRun(PizzaHouse* pPH)
+{
+	if(pPH->nextEventTime == -1)
+		pPH->elapsedTime = 0;
+	else
+		pPH->elapsedTime = pPH->nextEventTime;
+	pPH->currentTime += pPH->elapsedTime;
+	pPH->nextEventTime = -1;
+
+	OrderStart(pPH);
+	ReceiveOrder(pPH);
+	CalculateOrder(pPH);
+	MakePizza(pPH);
+	CheckCompletedOrder(pPH);
+	Delivery(pPH);
+
+	return !(IsAllOrderClear(pPH));
+}
+BOOL IsAllOrderClear(PizzaHouse* pPH)
+{
+	return pPH->orderCount == pPH->completeCount? TRUE:FALSE;
+}
+void PizzaHouseClose(PizzaHouse* pPH)
+{
+	int i;
+	DeleteList(pPH->orderList);
+
+	for(i = 0; i < PIZZA_MAKER_AMOUNT; ++i)
+		DeleteList(pPH->pizzaMaker[i].workQue);
+
+	DeleteList(pPH->orderQue);
+	DeleteList(pPH->calculateQue);
+	DeleteList(pPH->preparationQue);
+	DeleteList(pPH->makingPizzaQue);
+	DeleteList(pPH->waitingPizzaQue);
+	DeleteList(pPH->deliveryQue);
+
+	return;
+}
