@@ -3,7 +3,7 @@
 #include "PizzaHouse.h"
 #include "List.h"
 
-PizzaHouse* PizzaHouseOpen(List* pOrderList, int pQuantum, Scheduling pScheduling)
+PizzaHouse* PizzaHouseOpen(List* pOrderList, int pQuantum, Scheduling pScheduling, FILE* pDestination)
 {
 	int i;
 	PizzaHouse* pizzaHouse = (PizzaHouse*)malloc(sizeof(PizzaHouse));
@@ -37,6 +37,10 @@ PizzaHouse* PizzaHouseOpen(List* pOrderList, int pQuantum, Scheduling pSchedulin
 
 	pizzaHouse->orderCount = Size(pOrderList);
 	pizzaHouse->completeCount = 0;
+
+	pizzaHouse->destination = pDestination;
+
+	PrintOrder(NULL, 0, NULL, 0);
 
 	return pizzaHouse;
 }
@@ -268,69 +272,73 @@ void ReadyPizza(Order* pOrder, List* pPizzaList ,List* pNextQue)
 	GoNextQue(pOrder, pNextQue, FCFS);
 	return;
 }
-void PrintOrder(Order* pOrder, int pCurrentTime, int pIsTest)
+void PrintOrder(Order* pOrder, int pCurrentTime, FILE* pOutput, int pIsTest)
 {
 	static int num = 1;
-	static int testNum = 1;
+
+	if(pOrder == NULL)
+	{
+		num = 1;
+		return;
+	}
 
 	if(pIsTest)
 	{
-		printf("T%-2d ", testNum);
-		++testNum;
+		fprintf(pOutput, "\t%-2d ", pOrder->num);
 	}
 	else
 	{
-		printf(" %-2d ", num);
+		fprintf(pOutput, "%-2d ", num);
 		++num;
 	}
 
-	printf("%02d:%02d ",pOrder->arrivalTime/(60*60),(pOrder->arrivalTime/60)%60);
+	fprintf(pOutput, "%02d:%02d ",pOrder->arrivalTime/(60*60),(pOrder->arrivalTime/60)%60);
 	if(pOrder->type == VISIT)
-		printf("visiting ");
+		fprintf(pOutput, "visiting ");
 	else
-		printf("phone    ");
-	printf("%-4d ",pOrder->serviceTime);
-	printf("%-4d ",pCurrentTime - pOrder->arrivalTime);
+		fprintf(pOutput, "phone    ");
+	fprintf(pOutput, "%-4d ",pOrder->serviceTime);
+	fprintf(pOutput, "%-4d ",pCurrentTime - pOrder->arrivalTime);
 
 	if(pIsTest)
 	{
 		switch(pOrder->state)
 		{
 		case BeforeOrder:
-			printf("BeforeOrder");
+			fprintf(pOutput, "BeforeOrder");
 			break;
 		case WaitingToOrdered:
-			printf("WaitingToOrdered");
+			fprintf(pOutput, "WaitingToOrdered");
 			break;
 		case Ordering:
-			printf("Ordering");
+			fprintf(pOutput, "Ordering");
 			break;
 		case WaitingToCalculated:
-			printf("WaitingToCalculated");
+			fprintf(pOutput, "WaitingToCalculated");
 			break;
 		case Calculating:
-			printf("Calculating");
+			fprintf(pOutput, "Calculating");
 			break;
 		case WaitingToMaked:
-			printf("WaitingToMaked");
+			fprintf(pOutput, "WaitingToMaked");
 			break;
 		case WaitingPizza:
-			printf("WaitingPizza");
+			fprintf(pOutput, "WaitingPizza");
 			break;
 		case WaitingToDelivered:
-			printf("WaitingToDelivered");
+			fprintf(pOutput, "WaitingToDelivered");
 			break;
 		case Delivering:
-			printf("Delivering");
+			fprintf(pOutput, "Delivering");
 			break;
 		case Complete:
-			printf("Complete");
+			fprintf(pOutput, "Complete");
 			break;
 		default:
-			printf("STATE ERROR");
+			fprintf(pOutput, "STATE ERROR");
 		}
 	}
-	printf("\n");
+	fprintf(pOutput, "\n");
 	return;
 }
 void CheckCompletedOrder(PizzaHouse* pPH)
@@ -358,7 +366,7 @@ void CheckCompletedOrder(PizzaHouse* pPH)
 			if(order->type == VISIT)
 			{
 				order->state = Complete;
-				PrintOrder(order,pPH->currentTime,0);
+				PrintOrder(order,pPH->currentTime,pPH->destination,0);
 				FreeOrderMemory(order);
 				++(pPH->completeCount);
 			}
@@ -381,7 +389,8 @@ void Delivery(PizzaHouse* pPH)
 		pPH->deliveryStaff.remainingTime -= pPH->elapsedTime;
 		if(pPH->deliveryStaff.remainingTime == 0)
 		{
-			PrintOrder(pPH->deliveryStaff.progressingOrder,pPH->currentTime,0);
+			++(pPH->deliveryStaff.progressingOrder->state);
+			PrintOrder(pPH->deliveryStaff.progressingOrder,pPH->currentTime,pPH->destination,0);
 			FreeOrderMemory(pPH->deliveryStaff.progressingOrder);
 			++(pPH->completeCount);
 			RefreshWorker(&(pPH->deliveryStaff));
@@ -413,21 +422,13 @@ BOOL PizzaHouseRun(PizzaHouse* pPH)
 	pPH->currentTime += pPH->elapsedTime;
 	pPH->nextEventTime = -1;
 
-	//printf("next : %d\n", pPH->nextEventTime);
 	OrderStart(pPH);
-	//printf("next : %d\n", pPH->nextEventTime);
 	ReceiveOrder(pPH);
-	//printf("next : %d\n", pPH->nextEventTime);
 	CalculateOrder(pPH);
-	//printf("next : %d\n", pPH->nextEventTime);
 	MakePizza(pPH);
-	//printf("next : %d\n", pPH->nextEventTime);
 	CheckCompletedOrder(pPH);
-	//printf("next : %d\n", pPH->nextEventTime);
 	Delivery(pPH);
-	//printf("next : %d\n", pPH->nextEventTime);
 
-	//getc(stdin);
 	return !(IsAllOrderClear(pPH));
 }
 BOOL IsAllOrderClear(PizzaHouse* pPH)
@@ -450,6 +451,58 @@ void PizzaHouseClose(PizzaHouse* pPH)
 	DeleteList(pPH->deliveryQue);
 
 	free(pPH);
+
+	return;
+}
+void PizzaHouseNowState(PizzaHouse* pPH, FILE* pDebugFile)
+{
+	int i;
+	int current = pPH->currentTime;
+	fprintf(pDebugFile, "CurrentTime : %02d:%02d:%02d\n",current/(60*60), (current/60)%60, current%60);
+	if(Size(pPH->orderQue)!=0)
+	{
+		for(i = 0; i < Size(pPH->orderQue); i++)
+			PrintOrder((Order*)ObserveItem(pPH->orderQue, i),pPH->currentTime, pDebugFile, 1);
+	}
+
+	if(pPH->orderReceiver.progressingOrder != NULL)
+	{
+		PrintOrder(pPH->orderReceiver.progressingOrder,pPH->currentTime, pDebugFile, 1);	
+	}
+
+	if(Size(pPH->calculateQue)!=0)
+	{
+		for(i = 0; i < Size(pPH->calculateQue); i++)
+			PrintOrder((Order*)ObserveItem(pPH->calculateQue, i),pPH->currentTime, pDebugFile, 1);
+	}
+
+	if(pPH->calculater.progressingOrder != NULL)
+	{
+		PrintOrder(pPH->calculater.progressingOrder,pPH->currentTime, pDebugFile, 1);
+	}
+
+	if(Size(pPH->preparationQue)!=0)
+	{
+		for(i = 0; i < Size(pPH->preparationQue); i++)
+			PrintOrder((Order*)ObserveItem(pPH->preparationQue, i),pPH->currentTime, pDebugFile, 1);
+	}
+
+	if(Size(pPH->waitingPizzaQue)!=0)
+	{
+		for(i = 0; i < Size(pPH->waitingPizzaQue); i++)
+			PrintOrder((Order*)ObserveItem(pPH->waitingPizzaQue, i),pPH->currentTime, pDebugFile, 1);
+	}
+
+	if(Size(pPH->deliveryQue)!=0)
+	{
+		for(i = 0; i < Size(pPH->deliveryQue); i++)
+			PrintOrder((Order*)ObserveItem(pPH->deliveryQue, i),pPH->currentTime, pDebugFile, 1);
+	}
+
+	if(pPH->deliveryStaff.progressingOrder != NULL)
+	{
+		PrintOrder(pPH->deliveryStaff.progressingOrder,pPH->currentTime, pDebugFile, 1);
+	}
 
 	return;
 }

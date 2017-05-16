@@ -3,7 +3,7 @@
 #include "PizzaHouse.h"
 
 int OrderListReader(List** orderList, char* inputFile);
-Order* PhaseTextToOrder(char* buf);
+Order* ParsingTextToOrder(char* buf);
 int HourToSec(char* hour);
 OrderType TextToOrderType(char* orderType);
 PizzaType TextToPizzaType(char* pizzaType);

@@ -13,7 +13,7 @@ int OrderListReader(List** pOrderList, char* pInputFile)
 	FILE* f = fopen(pInputFile,"rt");
 	if(f == NULL)
 	{
-		printf("File Read Error\n");
+		printf("InputFile Read Error\n");
 		exit(0);
 	}
 
@@ -25,14 +25,14 @@ int OrderListReader(List** pOrderList, char* pInputFile)
 			break;
 		if(buf[0] == '\n')
 			break;
-		printf("%s",buf);		//debug
-		Insert(orderList,(void*)PhaseTextToOrder(buf),Size(orderList));
+		Insert(orderList,(void*)ParsingTextToOrder(buf),Size(orderList));
 	}
 	*pOrderList = orderList;
+	fclose(f);
 	return quantum;
 }
 
-Order* PhaseTextToOrder(char* pBuf)
+Order* ParsingTextToOrder(char* pBuf)
 {
 	Order* item = (Order*)malloc(sizeof(Order));
 

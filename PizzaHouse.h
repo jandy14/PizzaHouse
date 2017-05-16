@@ -120,9 +120,11 @@ struct _PizzaHouse
 
 	int orderCount;
 	int completeCount;
+
+	FILE* destination;
 };
 
-PizzaHouse* PizzaHouseOpen(List* orderList, int quantum, Scheduling scheduling);
+PizzaHouse* PizzaHouseOpen(List* orderList, int quantum, Scheduling scheduling, FILE* destination);
 void RefreshWorker(Worker* target);
 void RefreshPizzaMaker(PizzaMaker* target, int isAllClear);
 void GoNextQue(Order* order, List* destinationQue, Scheduling scheduling);
@@ -133,12 +135,13 @@ void CalculateOrder(PizzaHouse* pizzaHouse);
 void MakePizza(PizzaHouse* pizzaHouse);
 void DistributeWork(PizzaHouse* pizzaHouse);
 void ReadyPizza(Order* order,List* pizzaList, List* nextQue);
-void PrintOrder(Order* order, int currentTime, int isTest);
+void PrintOrder(Order* order, int currentTime, FILE* outFile, int isTest);
 void CheckCompletedOrder(PizzaHouse* pizzaHouse);
 void FreeOrderMemory(Order* order);
 void Delivery(PizzaHouse* pizzaHouse);
 BOOL PizzaHouseRun(PizzaHouse* pizzaHouse);
 BOOL IsAllOrderClear(PizzaHouse* pizzaHouse);
 void PizzaHouseClose(PizzaHouse* pizzaHouse);
+void PizzaHouseNowState(PizzaHouse* pizzaHouse, FILE* debugFile);
 
 #endif
