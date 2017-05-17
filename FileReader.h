@@ -1,6 +1,7 @@
 #ifndef __FILEREADER_H__
 #define __FILEREADER_H__
 #include "PizzaHouse.h"
+#include "List.h"
 
 int OrderListReader(List** orderList, char* inputFile);
 Order* ParsingTextToOrder(char* buf);

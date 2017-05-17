@@ -1,7 +1,18 @@
+// -----------------------------------------------------------------------
+// NAME : Jung Sung-wook	User ID : 20123307
+// DUE DATE : 05/17/2017
+// PROJECT #1
+// FILE NAME : List.c
+// PROGRAM PURPOSE :
+//	List.h에 선언된 함수를 정의 합니다.
+// -----------------------------------------------------------------------
 #include <stdlib.h>
-
 #include "List.h"
 
+// -----------------------------------------------------------------------
+// FUNCTION NewList :
+//	Allocate List head node and return
+// -----------------------------------------------------------------------
 Node* NewList()
 {
 	Node* head = (Node*)malloc(sizeof(Node));
@@ -12,6 +23,12 @@ Node* NewList()
 	return head;
 }
 
+// -----------------------------------------------------------------------
+// FUNCTION Pop :
+//	리스트의 제일 처음 노드에 저장된 값을 반환하고 리스트에서 제거
+// PARAMETER USAGE :
+//	pHead : 리스트 헤더
+// -----------------------------------------------------------------------
 void* Pop(Node* pHead)
 {
 	void* item;
@@ -34,6 +51,12 @@ void* Pop(Node* pHead)
 	return item;
 }
 
+// -----------------------------------------------------------------------
+// FUNCTION Size :
+//	리스트가 가지고 있는 노드의 갯수를 확인하고 반환
+// PARAMETER USAGE :
+//	pHead : 리스트 헤더
+// -----------------------------------------------------------------------
 int Size(Node* pHead)
 {
 	int size = 0;
@@ -43,6 +66,14 @@ int Size(Node* pHead)
 	return size;
 }
 
+// -----------------------------------------------------------------------
+// FUNCTION Insert :
+//	리스트의 정해진 인덱스에 값을 저장하는 함수
+// PARAMETER USAGE :
+//	pHead : 리스트 헤더
+//	pItem : 리스트에 저장될 값
+//	pIndex : 리스트의 몇번쩨에 넣을 것인가
+// -----------------------------------------------------------------------
 int Insert(Node* pHead, void* pItem, int pIndex)
 {
 	int size = Size(pHead);
@@ -71,6 +102,13 @@ int Insert(Node* pHead, void* pItem, int pIndex)
 	return 0;
 }
 
+// -----------------------------------------------------------------------
+// FUNCTION ObserveItem :
+//	리스트의 정해진 인덱스에 있는 값을 반환 (리스트에서 없애지는 않음)
+// PARAMETER USAGE :
+//	pHead : 리스트 헤더
+//	pIndex : 리스트의 몇번쩨를 볼것인가
+// -----------------------------------------------------------------------
 void* ObserveItem(Node* pHead, int pIndex)
 {
 
@@ -85,6 +123,12 @@ void* ObserveItem(Node* pHead, int pIndex)
 	return iter->item;
 }
 
+// -----------------------------------------------------------------------
+// FUNCTION DeleteList :
+//	리스트에 연결되어있는 모든 노드들의 메모리를 풀어주는 함수
+// PARAMETER USAGE :
+//	pHead : 리스트 헤더
+// -----------------------------------------------------------------------
 void DeleteList(Node* pHead)
 {
 	Node* iter;

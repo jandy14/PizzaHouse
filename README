@@ -1,0 +1,114 @@
+20123307_proj1
+
+Purpose =======================================================================
+
+정해진 포맷의 파일을 입력받아 결과값을 출력하는 프로그램입니다.
+입력은 피자주문들로 각각 주문번호, 도착시간, 주문타입(전화인지 방문인지)
+그리고 주문할 피자들을 가지고 있습니다.
+출력은 완료번호, 도착시간, 주문타입, 피자를 만드는데 필요한 시간
+그리고 주문이 들어간 시점부터 완료되기까지의 시간을 출력합니다.
+출력은 크게 3부분으로 나뉘어지며 각 부분마다
+FCFS(First Come First Serve),
+SJF(Shortest Job First),
+RR(Round Robin)으로 피자가게를 운영해 얻은 결과입니다.
+
+Usage =========================================================================
+
+./20123307_proj1 InputFile [-d DebugLogFile] [-o OutputFile]
+   (must) InputFile     : 입력할 정보가 담겨있는 파일의 경로입니다.
+       -d DebugLogFile  : 주문들이 이동하는 과정을 확인하고 싶을때
+                          시간 순으로 출력하게 해주는 옵션입니다.
+                          파일이름은 필수적입니다.
+       -o OutputFile    : 출력을 파일로 하고 싶을때 사용하는 옵션입니다.
+                          기본적으로는 표준출력(stdout)으로 돼있습니다.
+                          파일이름은 필수적입니다.
+
+InputFile Format ==============================================================
+
+파일의 형식은 꽤나 유연성이 없습니다.
+LineNumber Contents순으로 설명하겠습니다.
+//은 실제 파일에는 없는 주석입니다.
+()은 실제 파일에는 값으로 대체됩니다.
+
+========start input file========
+1 Q=(integer over 0) //()안에 값은 RR에서 사용할 Quantum값이 됩니다.
+2 number    arrival time    order type    pizza type
+//2번째 줄은 사용자의 편의를 위한 줄로 그 어떤 값이 들어있어도 상관없습니다.
+3 (order number) (arrival time) (order type) (pizza type list)
+:
+:
+n (order number) (arrival time) (order type) (pizza type list)
+//3번줄부터 마지막 줄까지는 주문내용이 들어있으며 몇가지 제약조건이 있습니다.
+//order number값은 1부터 1씩증가합니다.
+//arrival time값은 그 앞 주문보다 시간이 같을 수는 있지만 빠를 수는 없습니다.
+//주문 안에 값은 의미와 형식이있습니다.
+//order number값은 주문의 순서를 나타내며 일반적인 양수 정수입니다.
+//arrival time값은 주문이 피자가게에 들어오는 시간이며
+//                 printf 포맷은 빌려 %02d:%02d 형태로 되어있습니다.
+//order type값은 주문이 방문고객인지 전화고객인지 구분하며
+//               phone 또는 visiting 둘의 값만 가집니다.
+//pizza type list 값은 주문의 내용이며 ','를 기준으로 나뉘며
+//                     4가지의 피자를 가집니다.
+//                     cheese pizza
+//                     pepperoni pizza
+//                     potato pizza
+//                     shrimp pizza
+=========end input file=========
+
+LineNumber와 Comments을 제외한 실제 파일 예시 입니다.
+=======input file example=======
+Q = 23
+number    arrival time    order type    pizza type
+1 09:00 phone pepperoni pizza,potato pizza,shrimp pizza,pepperoni pizza
+2 09:00 visiting potato pizza,shrimp pizza
+3 09:05 visiting pepperoni pizza,shrimp pizza,cheese pizza
+4 09:08 phone pepperoni pizza,cheese pizza,potato pizza
+5 09:11 phone shrimp pizza
+6 09:15 visiting shrimp pizza,cheese pizza
+7 09:18 visiting cheese pizza,cheese pizza,potato pizza
+8 09:20 phone potato pizza,cheese pizza,pepperoni pizza
+=========end input file=========
+
+Output ========================================================================
+출력은 순서대로
+완료된 순서, 주문 시작시간, 피자 만드는데 필요한 시간, 경과시간입니다.
+
+Algorithm =====================================================================
+
+피자가게를 생성해 초기화하고 이벤트가 일어나는 시간마다
+그 시간에 일어나는 일들을 처리하고 다음 이벤트가 일어나는
+시간으로 시간을 옮기고 그시간에 일어나는 이벤트를 처리하는 행동을
+모든 주문을 처리할때 까지 반복합니다.
+
+피자가게는 PizzaHouse라는 구조체로 표현됩니다.
+그안에는 이벤트 처리에 필요한 자료들이 담겨있습니다.
+중요한 부분만 설명하자면
+우선 주문을 받는 orderReceiver 1명,
+주문을 계산하는 calculater 1명,
+피자를 만드는 pizzaMaker 5명,
+그리고 배달하는 deliveryStaff 1명
+그리고 각각 일꾼들이 처리해야하는 일이 쌓이는 큐들이 각각있습니다.
+그리고 inputFile을 통해 얻은 모든 주문이 담김 리스트(orderList),
+현재시각, 총 주문 갯수, 완료된 갯수, quantum, 스케줄링 방식등이 있습니다.
+
+우선 먼저 pizzaHouse를 생성해 초기화합니다.
+초기화는 큐를 생성하고 일꾼들의 값을 초기화해주고
+quantum값과 스케줄링 방식을 설정해주고 현재 시간을 설정해주는데
+제일 처음 시작 시간은 제일 빠른 주문의 시간으로 합니다.
+(이는 필요없는 시간대에 프로그램 시간을 낭비하지 않기 위해서 입니다.)
+
+그리고 현재시각에는 정해진 작업을 순차적으로 처리하게 되는데
+우선 orderList에 현재시각에 맞는 주문이 있는지 확인하고 있으면
+리스트에서 요소를 빼내 다음 큐(orderReceiver의 큐)로 보내게 됩니다.
+orderReceiver는 현재 진행중인 작업이 있다면 지난 시간만큼 일을 처리하고
+맡은 일이 끝났으면 다음 큐(calculater의 큐)로 보내게 됩니다.
+그리고 할일이 없다면 본인의 큐(orderReceiver의 큐)에서 일(주문)을 가지고 옵니다.
+없다면 쉽니다.
+calculater도 마찬가지로 자신의 일을 처리하고 맡은 일이 끝나면
+다음 큐(pizzaMaker의 큐)로 보낸다.
+그리고 할일이 없다면 본인의 큐(calculater의 큐)에서 일(주문)을 가지고 옵니다.
+pizzaMaker와 deliveryStaff도 이런 식으로 돌아가게 됩니다.
+
+그리고 중간에 완료된 주문은 출력포맷에 맞춰 출력하게 됩니다.
+
+모든 주문이 끝나면 메모리를 정리해주면서 pizzaHouse의 메모리를 풀어줍니다.

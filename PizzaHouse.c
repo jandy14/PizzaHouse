@@ -1,8 +1,25 @@
+// -----------------------------------------------------------------------
+// NAME : Jung Sung-wook	User ID : 20123307
+// DUE DATE : 05/17/2017
+// PROJECT #1
+// FILE NAME : PizzaHouse.c
+// PROGRAM PURPOSE :
+//	PizzaHouse.h에 선언된 함수를 정의 합니다.
+// -----------------------------------------------------------------------
 #include <stdlib.h>
 #include <stdio.h>
 #include "PizzaHouse.h"
 #include "List.h"
 
+// -----------------------------------------------------------------------
+// FUNCTION PizzaHouseOpen :
+//	PizzaHouse객체를 생성하고 값을 초기화 그리고 반환
+// PARAMETER USAGE :
+//	pOrderList : 주문이 저장되어있는 리스트의 헤더
+//	pQuantum : quantum값
+//	pScheduling : 스케줄링 종류(FCFS, SJF, RR)
+//	pDestination : 결과를 출력할 스트림 보통은 stdout
+// -----------------------------------------------------------------------
 PizzaHouse* PizzaHouseOpen(List* pOrderList, int pQuantum, Scheduling pScheduling, FILE* pDestination)
 {
 	int i;
@@ -44,11 +61,26 @@ PizzaHouse* PizzaHouseOpen(List* pOrderList, int pQuantum, Scheduling pSchedulin
 
 	return pizzaHouse;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION RefreshWorker :
+//	Worker의 값을 초기화
+// PARAMETER USAGE :
+//	pTarget : 값을 초기화할 대상의 주소
+// -----------------------------------------------------------------------
 void RefreshWorker(Worker* pTarget)
 {
 	pTarget->progressingOrder = NULL;
 	pTarget->remainingTime = 0;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION RefreshWorker :
+//	PizzaMaker의 값을 초기화
+// PARAMETER USAGE :
+//	pTarget : 값을 초기화할 대상의 주소
+//	pIsAllClear : 리스트까지 모두 초기화 할것인가
+// -----------------------------------------------------------------------
 void RefreshPizzaMaker(PizzaMaker* pTarget, int pIsAllClear)
 {
 	pTarget->progressingPizza = NULL;
@@ -56,10 +88,20 @@ void RefreshPizzaMaker(PizzaMaker* pTarget, int pIsAllClear)
 	if(pIsAllClear)
 		DeleteList(pTarget->workQue);
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION GoNextQue :
+//	Order객체를 받아서 다음 큐로 이동
+// PARAMETER USAGE :
+//	pOrder : 이동할 객체
+//	pDestinationQue : 이동할 목적지 큐
+//	pScheduling : 스케줄링값에 따라 큐의 순서가 바뀔수 있다
+// -----------------------------------------------------------------------
 void GoNextQue(Order* pOrder, List* pDestinationQue, Scheduling pScheduling)
 {
 	int index = 0;
 	++(pOrder->state);
+	//SJF인 경우 큐에 넣을때 serviceTime에 따라 큐의 순서 변동
 	if(pScheduling == SJF)
 	{
 		for(index = 0; index < Size(pDestinationQue); ++index)
@@ -74,6 +116,14 @@ void GoNextQue(Order* pOrder, List* pDestinationQue, Scheduling pScheduling)
 	Insert(pDestinationQue,(void*)pOrder,index);	
 	return;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION FindNextEventTime :
+//	다음 이벤트 타임이 언제인지 비교하는 함수
+// PARAMETER USAGE :
+//	pPH : 다음 이벤트 시간이 저장되어 있는 PizzaHouse
+//	pTime : 비교할 시간
+// -----------------------------------------------------------------------
 void FindNextEventTime(PizzaHouse* pPH, int pTime)
 {
 	if(pPH->nextEventTime == -1)
@@ -85,6 +135,12 @@ void FindNextEventTime(PizzaHouse* pPH, int pTime)
 
 	return;
 }
+// -----------------------------------------------------------------------
+// FUNCTION OrderStart :
+//	주문 리스트에 넣은 값중 현재시각과 같은 주문은 주문큐로 이동시킨다.
+// PARAMETER USAGE :
+//	pPH : 주문리스트나 다음 목적지를 가지고 있는 PizzaHouse객체
+// -----------------------------------------------------------------------
 void OrderStart(PizzaHouse* pPH)
 {
 	if(Size(pPH->orderList) == 0) //order over
