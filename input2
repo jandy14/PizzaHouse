@@ -1,0 +1,42 @@
+﻿Q=10
+number arrival time order type pizza type
+1 09:00 phone pepperoni pizza,potato pizza,shrimp pizza,pepperoni pizza
+2 09:00 visiting potato pizza,shrimp pizza
+3 09:05 visiting pepperoni pizza,shrimp pizza,cheese pizza
+4 09:08 phone pepperoni pizza,cheese pizza,potato pizza
+5 09:11 phone shrimp pizza
+6 09:15 visiting shrimp pizza,cheese pizza
+7 09:18 visiting cheese pizza,cheese pizza,potato pizza
+8 09:20 phone potato pizza,cheese pizza,pepperoni pizza
+9 09:25 visiting potato pizza,potato pizza,shrimp pizza,pepperoni pizza
+10 09:30 phone cheese pizza,potato pizza,shrimp pizza,pepperoni pizza,cheese pizza
+11 09:40 phone pepperoni pizza,potato pizza,shrimp pizza,pepperoni pizza
+12 09:41 visiting potato pizza,shrimp pizza
+13 09:45 visiting pepperoni pizza,shrimp pizza
+14 09:48 phone cheese pizza,potato pizza
+15 09:51 visiting potato pizza
+16 09:55 visiting shrimp pizza,cheese pizza
+17 09:58 visiting cheese pizza,cheese pizza,potato pizza,pepperoni pizza
+18 10:10 phone potato pizza,cheese pizza
+19 10:15 visiting potato pizza,shrimp pizza
+20 10:30 phone potato pizza,shrimp pizza,pepperoni pizza
+21 10:32 visiting pepperoni pizza,potato pizza,shrimp pizza,pepperoni pizza
+22 10:34 visiting shrimp pizza,pepperoni pizza
+23 10:48 visiting pepperoni pizza,cheese pizza
+24 10:58 phone pepperoni pizza,cheese pizza
+25 11:11 visiting cheese pizza
+26 11:25 visiting pepperoni pizza
+27 11:38 visiting cheese pizza,cheese pizza
+28 11:40 visiting potato pizza,shrimp pizza
+29 11:45 visiting potato pizza,potato pizza,shrimp pizza,cheese pizza
+30 12:00 phone cheese pizza,potato pizza,shrimp pizza,pepperoni pizza,cheese pizza
+31 12:40 phone pepperoni pizza,potato pizza,shrimp pizza,pepperoni pizza
+32 12:41 phone potato pizza,shrimp pizza
+33 12:45 visiting pepperoni pizza,shrimp pizza
+34 12:48 phone cheese pizza,potato pizza
+35 12:51 phone shrimp pizza
+36 12:55 visiting shrimp pizza,cheese pizza
+37 12:58 phone cheese pizza,cheese pizza,potato pizza,pepperoni pizza
+38 13:10 visiting potato pizza,cheese pizza
+39 13:15 visiting potato pizza,pepperoni pizza
+40 13:30 visiting cheese pizza,shrimp pizza,potato pizza 

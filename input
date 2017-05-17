@@ -1,0 +1,14 @@
+Q = 50
+number  arrival time    order type  pizza type
+1 09:00 phone pepperoni pizza,potato pizza,shrimp pizza,pepperoni pizza
+2 09:10 visiting potato pizza,shrimp pizza
+3 09:10 phone shrimp pizza,cheese pizza,pepperoni pizza
+4 09:15 visiting shrimp pizza,cheese pizza,pepperoni pizza
+5 09:30 visiting pepperoni pizza,potato pizza,Cheese pizza
+6 10:00 phone potato pizza
+7 10:02 visiting potato pizza,pepperoni pizza
+8 10:10 visiting pepperoni pizza,potato pizza,shrimp pizza,potato pizza,cheese pizza,pepperoni pizza,shrimp pizza
+9 10:12 phone potato pizza
+10 10:14 phone pepperoni pizza
+11 10:14 visiting shrimp pizza
+12 10:14 phone potato pizza

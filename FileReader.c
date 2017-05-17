@@ -17,7 +17,10 @@ int OrderListReader(List** pOrderList, char* pInputFile)
 		exit(0);
 	}
 
-	fscanf(f,"Q = %d\n",&quantum);
+	//fscanf(f,"Q = %d\n",&quantum);
+	fgets(buf,1024,f);
+	strtok(buf,"=");
+	quantum = atoi(strtok(NULL," \n\r"));
 	fgets(buf,1024,f);
 	while(!feof(f))
 	{
