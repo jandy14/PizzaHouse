@@ -1,0 +1,566 @@
+==================FCFS==================
+CurrentTime : 09:00:00
+	1  09:00 phone    390  0    Ordering
+CurrentTime : 09:00:03
+	1  09:00 phone    390  3    Calculating
+CurrentTime : 09:00:08
+	1  09:00 phone    390  8    WaitingPizza
+CurrentTime : 09:01:38
+	1  09:00 phone    390  98   WaitingPizza
+CurrentTime : 09:01:48
+	1  09:00 phone    390  108  WaitingPizza
+CurrentTime : 09:01:58
+	1  09:00 phone    390  118  Delivering
+CurrentTime : 09:05:18
+CurrentTime : 09:10:00
+	3  09:10 phone    280  0    WaitingToOrdered
+	2  09:10 visiting 210  0    Ordering
+CurrentTime : 09:10:05
+	3  09:10 phone    280  5    Ordering
+	2  09:10 visiting 210  5    Calculating
+CurrentTime : 09:10:08
+	3  09:10 phone    280  8    WaitingToCalculated
+	2  09:10 visiting 210  8    Calculating
+CurrentTime : 09:10:10
+	3  09:10 phone    280  10   Calculating
+	2  09:10 visiting 210  10   WaitingPizza
+CurrentTime : 09:10:15
+	2  09:10 visiting 210  15   WaitingPizza
+	3  09:10 phone    280  15   WaitingPizza
+CurrentTime : 09:11:35
+	2  09:10 visiting 210  95   WaitingPizza
+	3  09:10 phone    280  95   WaitingPizza
+CurrentTime : 09:11:45
+	2  09:10 visiting 210  105  WaitingPizza
+	3  09:10 phone    280  105  WaitingPizza
+CurrentTime : 09:11:50
+	2  09:10 visiting 210  110  WaitingPizza
+	3  09:10 phone    280  110  WaitingPizza
+CurrentTime : 09:12:00
+	3  09:10 phone    280  120  WaitingPizza
+CurrentTime : 09:12:05
+	3  09:10 phone    280  125  Delivering
+CurrentTime : 09:15:00
+	4  09:15 visiting 280  0    Ordering
+	3  09:10 phone    280  300  Delivering
+CurrentTime : 09:15:05
+	4  09:15 visiting 280  5    Calculating
+	3  09:10 phone    280  305  Delivering
+CurrentTime : 09:15:10
+	4  09:15 visiting 280  10   WaitingPizza
+	3  09:10 phone    280  310  Delivering
+CurrentTime : 09:15:25
+	4  09:15 visiting 280  25   WaitingPizza
+CurrentTime : 09:16:30
+	4  09:15 visiting 280  90   WaitingPizza
+CurrentTime : 09:16:40
+	4  09:15 visiting 280  100  WaitingPizza
+CurrentTime : 09:17:00
+CurrentTime : 09:30:00
+	5  09:30 visiting 270  0    Ordering
+CurrentTime : 09:30:05
+	5  09:30 visiting 270  5    Calculating
+CurrentTime : 09:30:10
+	5  09:30 visiting 270  10   WaitingPizza
+CurrentTime : 09:31:30
+	5  09:30 visiting 270  90   WaitingPizza
+CurrentTime : 09:31:40
+	5  09:30 visiting 270  100  WaitingPizza
+CurrentTime : 09:31:50
+CurrentTime : 10:00:00
+	6  10:00 phone    100  0    Ordering
+CurrentTime : 10:00:03
+	6  10:00 phone    100  3    Calculating
+CurrentTime : 10:00:08
+	6  10:00 phone    100  8    WaitingPizza
+CurrentTime : 10:01:48
+	6  10:00 phone    100  108  Delivering
+CurrentTime : 10:02:00
+	7  10:02 visiting 190  0    Ordering
+	6  10:00 phone    100  120  Delivering
+CurrentTime : 10:02:05
+	7  10:02 visiting 190  5    Calculating
+	6  10:00 phone    100  125  Delivering
+CurrentTime : 10:02:10
+	7  10:02 visiting 190  10   WaitingPizza
+	6  10:00 phone    100  130  Delivering
+CurrentTime : 10:03:40
+	7  10:02 visiting 190  100  WaitingPizza
+	6  10:00 phone    100  220  Delivering
+CurrentTime : 10:03:50
+	6  10:00 phone    100  230  Delivering
+CurrentTime : 10:05:08
+CurrentTime : 10:10:00
+	8  10:10 visiting 680  0    Ordering
+CurrentTime : 10:10:05
+	8  10:10 visiting 680  5    Calculating
+CurrentTime : 10:10:10
+	8  10:10 visiting 680  10   WaitingPizza
+CurrentTime : 10:11:30
+	8  10:10 visiting 680  90   WaitingPizza
+CurrentTime : 10:11:40
+	8  10:10 visiting 680  100  WaitingPizza
+CurrentTime : 10:11:50
+	8  10:10 visiting 680  110  WaitingPizza
+CurrentTime : 10:12:00
+	9  10:12 phone    100  0    Ordering
+	8  10:10 visiting 680  120  WaitingPizza
+CurrentTime : 10:12:03
+	9  10:12 phone    100  3    Calculating
+	8  10:10 visiting 680  123  WaitingPizza
+CurrentTime : 10:12:08
+	8  10:10 visiting 680  128  WaitingPizza
+	9  10:12 phone    100  8    WaitingPizza
+CurrentTime : 10:13:00
+	8  10:10 visiting 680  180  WaitingPizza
+	9  10:12 phone    100  60   WaitingPizza
+CurrentTime : 10:13:30
+	9  10:12 phone    100  90   WaitingPizza
+CurrentTime : 10:13:48
+	9  10:12 phone    100  108  Delivering
+CurrentTime : 10:14:00
+	11 10:14 visiting 110  0    WaitingToOrdered
+	12 10:14 phone    100  0    WaitingToOrdered
+	10 10:14 phone    90   0    Ordering
+	9  10:12 phone    100  120  Delivering
+CurrentTime : 10:14:03
+	12 10:14 phone    100  3    WaitingToOrdered
+	11 10:14 visiting 110  3    Ordering
+	10 10:14 phone    90   3    Calculating
+	9  10:12 phone    100  123  Delivering
+CurrentTime : 10:14:08
+	12 10:14 phone    100  8    Ordering
+	11 10:14 visiting 110  8    Calculating
+	10 10:14 phone    90   8    WaitingPizza
+	9  10:12 phone    100  128  Delivering
+CurrentTime : 10:14:11
+	12 10:14 phone    100  11   WaitingToCalculated
+	11 10:14 visiting 110  11   Calculating
+	10 10:14 phone    90   11   WaitingPizza
+	9  10:12 phone    100  131  Delivering
+CurrentTime : 10:14:13
+	12 10:14 phone    100  13   Calculating
+	10 10:14 phone    90   13   WaitingPizza
+	11 10:14 visiting 110  13   WaitingPizza
+	9  10:12 phone    100  133  Delivering
+CurrentTime : 10:14:18
+	10 10:14 phone    90   18   WaitingPizza
+	11 10:14 visiting 110  18   WaitingPizza
+	12 10:14 phone    100  18   WaitingPizza
+	9  10:12 phone    100  138  Delivering
+CurrentTime : 10:15:38
+	11 10:14 visiting 110  98   WaitingPizza
+	12 10:14 phone    100  98   WaitingPizza
+	10 10:14 phone    90   98   WaitingToDelivered
+	9  10:12 phone    100  218  Delivering
+CurrentTime : 10:15:58
+	11 10:14 visiting 110  118  WaitingPizza
+	10 10:14 phone    90   118  WaitingToDelivered
+	12 10:14 phone    100  118  WaitingToDelivered
+	9  10:12 phone    100  238  Delivering
+CurrentTime : 10:16:03
+	10 10:14 phone    90   123  WaitingToDelivered
+	12 10:14 phone    100  123  WaitingToDelivered
+	9  10:12 phone    100  243  Delivering
+CurrentTime : 10:17:08
+	12 10:14 phone    100  188  WaitingToDelivered
+	10 10:14 phone    90   188  Delivering
+CurrentTime : 10:20:28
+	12 10:14 phone    100  388  Delivering
+===================SJF==================
+CurrentTime : 09:00:00
+	1  09:00 phone    390  0    Ordering
+CurrentTime : 09:00:03
+	1  09:00 phone    390  3    Calculating
+CurrentTime : 09:00:08
+	1  09:00 phone    390  8    WaitingPizza
+CurrentTime : 09:01:38
+	1  09:00 phone    390  98   WaitingPizza
+CurrentTime : 09:01:48
+	1  09:00 phone    390  108  WaitingPizza
+CurrentTime : 09:01:58
+	1  09:00 phone    390  118  Delivering
+CurrentTime : 09:05:18
+CurrentTime : 09:10:00
+	3  09:10 phone    280  0    WaitingToOrdered
+	2  09:10 visiting 210  0    Ordering
+CurrentTime : 09:10:05
+	3  09:10 phone    280  5    Ordering
+	2  09:10 visiting 210  5    Calculating
+CurrentTime : 09:10:08
+	3  09:10 phone    280  8    WaitingToCalculated
+	2  09:10 visiting 210  8    Calculating
+CurrentTime : 09:10:10
+	3  09:10 phone    280  10   Calculating
+	2  09:10 visiting 210  10   WaitingPizza
+CurrentTime : 09:10:15
+	2  09:10 visiting 210  15   WaitingPizza
+	3  09:10 phone    280  15   WaitingPizza
+CurrentTime : 09:11:35
+	2  09:10 visiting 210  95   WaitingPizza
+	3  09:10 phone    280  95   WaitingPizza
+CurrentTime : 09:11:45
+	2  09:10 visiting 210  105  WaitingPizza
+	3  09:10 phone    280  105  WaitingPizza
+CurrentTime : 09:11:50
+	2  09:10 visiting 210  110  WaitingPizza
+	3  09:10 phone    280  110  WaitingPizza
+CurrentTime : 09:12:00
+	3  09:10 phone    280  120  WaitingPizza
+CurrentTime : 09:12:05
+	3  09:10 phone    280  125  Delivering
+CurrentTime : 09:15:00
+	4  09:15 visiting 280  0    Ordering
+	3  09:10 phone    280  300  Delivering
+CurrentTime : 09:15:05
+	4  09:15 visiting 280  5    Calculating
+	3  09:10 phone    280  305  Delivering
+CurrentTime : 09:15:10
+	4  09:15 visiting 280  10   WaitingPizza
+	3  09:10 phone    280  310  Delivering
+CurrentTime : 09:15:25
+	4  09:15 visiting 280  25   WaitingPizza
+CurrentTime : 09:16:30
+	4  09:15 visiting 280  90   WaitingPizza
+CurrentTime : 09:16:40
+	4  09:15 visiting 280  100  WaitingPizza
+CurrentTime : 09:17:00
+CurrentTime : 09:30:00
+	5  09:30 visiting 270  0    Ordering
+CurrentTime : 09:30:05
+	5  09:30 visiting 270  5    Calculating
+CurrentTime : 09:30:10
+	5  09:30 visiting 270  10   WaitingPizza
+CurrentTime : 09:31:30
+	5  09:30 visiting 270  90   WaitingPizza
+CurrentTime : 09:31:40
+	5  09:30 visiting 270  100  WaitingPizza
+CurrentTime : 09:31:50
+CurrentTime : 10:00:00
+	6  10:00 phone    100  0    Ordering
+CurrentTime : 10:00:03
+	6  10:00 phone    100  3    Calculating
+CurrentTime : 10:00:08
+	6  10:00 phone    100  8    WaitingPizza
+CurrentTime : 10:01:48
+	6  10:00 phone    100  108  Delivering
+CurrentTime : 10:02:00
+	7  10:02 visiting 190  0    Ordering
+	6  10:00 phone    100  120  Delivering
+CurrentTime : 10:02:05
+	7  10:02 visiting 190  5    Calculating
+	6  10:00 phone    100  125  Delivering
+CurrentTime : 10:02:10
+	7  10:02 visiting 190  10   WaitingPizza
+	6  10:00 phone    100  130  Delivering
+CurrentTime : 10:03:40
+	7  10:02 visiting 190  100  WaitingPizza
+	6  10:00 phone    100  220  Delivering
+CurrentTime : 10:03:50
+	6  10:00 phone    100  230  Delivering
+CurrentTime : 10:05:08
+CurrentTime : 10:10:00
+	8  10:10 visiting 680  0    Ordering
+CurrentTime : 10:10:05
+	8  10:10 visiting 680  5    Calculating
+CurrentTime : 10:10:10
+	8  10:10 visiting 680  10   WaitingPizza
+CurrentTime : 10:11:30
+	8  10:10 visiting 680  90   WaitingPizza
+CurrentTime : 10:11:40
+	8  10:10 visiting 680  100  WaitingPizza
+CurrentTime : 10:11:50
+	8  10:10 visiting 680  110  WaitingPizza
+CurrentTime : 10:12:00
+	9  10:12 phone    100  0    Ordering
+	8  10:10 visiting 680  120  WaitingPizza
+CurrentTime : 10:12:03
+	9  10:12 phone    100  3    Calculating
+	8  10:10 visiting 680  123  WaitingPizza
+CurrentTime : 10:12:08
+	8  10:10 visiting 680  128  WaitingPizza
+	9  10:12 phone    100  8    WaitingPizza
+CurrentTime : 10:13:00
+	8  10:10 visiting 680  180  WaitingPizza
+	9  10:12 phone    100  60   WaitingPizza
+CurrentTime : 10:13:30
+	9  10:12 phone    100  90   WaitingPizza
+CurrentTime : 10:13:48
+	9  10:12 phone    100  108  Delivering
+CurrentTime : 10:14:00
+	12 10:14 phone    100  0    WaitingToOrdered
+	11 10:14 visiting 110  0    WaitingToOrdered
+	10 10:14 phone    90   0    Ordering
+	9  10:12 phone    100  120  Delivering
+CurrentTime : 10:14:03
+	11 10:14 visiting 110  3    WaitingToOrdered
+	12 10:14 phone    100  3    Ordering
+	10 10:14 phone    90   3    Calculating
+	9  10:12 phone    100  123  Delivering
+CurrentTime : 10:14:06
+	11 10:14 visiting 110  6    Ordering
+	12 10:14 phone    100  6    WaitingToCalculated
+	10 10:14 phone    90   6    Calculating
+	9  10:12 phone    100  126  Delivering
+CurrentTime : 10:14:08
+	11 10:14 visiting 110  8    Ordering
+	12 10:14 phone    100  8    Calculating
+	10 10:14 phone    90   8    WaitingPizza
+	9  10:12 phone    100  128  Delivering
+CurrentTime : 10:14:11
+	11 10:14 visiting 110  11   WaitingToCalculated
+	12 10:14 phone    100  11   Calculating
+	10 10:14 phone    90   11   WaitingPizza
+	9  10:12 phone    100  131  Delivering
+CurrentTime : 10:14:13
+	11 10:14 visiting 110  13   Calculating
+	10 10:14 phone    90   13   WaitingPizza
+	12 10:14 phone    100  13   WaitingPizza
+	9  10:12 phone    100  133  Delivering
+CurrentTime : 10:14:18
+	10 10:14 phone    90   18   WaitingPizza
+	12 10:14 phone    100  18   WaitingPizza
+	11 10:14 visiting 110  18   WaitingPizza
+	9  10:12 phone    100  138  Delivering
+CurrentTime : 10:15:38
+	12 10:14 phone    100  98   WaitingPizza
+	11 10:14 visiting 110  98   WaitingPizza
+	10 10:14 phone    90   98   WaitingToDelivered
+	9  10:12 phone    100  218  Delivering
+CurrentTime : 10:15:53
+	11 10:14 visiting 110  113  WaitingPizza
+	10 10:14 phone    90   113  WaitingToDelivered
+	12 10:14 phone    100  113  WaitingToDelivered
+	9  10:12 phone    100  233  Delivering
+CurrentTime : 10:16:08
+	10 10:14 phone    90   128  WaitingToDelivered
+	12 10:14 phone    100  128  WaitingToDelivered
+	9  10:12 phone    100  248  Delivering
+CurrentTime : 10:17:08
+	12 10:14 phone    100  188  WaitingToDelivered
+	10 10:14 phone    90   188  Delivering
+CurrentTime : 10:20:28
+	12 10:14 phone    100  388  Delivering
+===================RR===================
+CurrentTime : 09:00:00
+	1  09:00 phone    390  0    Ordering
+CurrentTime : 09:00:03
+	1  09:00 phone    390  3    Calculating
+CurrentTime : 09:00:08
+	1  09:00 phone    390  8    WaitingPizza
+CurrentTime : 09:00:58
+	1  09:00 phone    390  58   WaitingPizza
+CurrentTime : 09:01:38
+	1  09:00 phone    390  98   WaitingPizza
+CurrentTime : 09:01:48
+	1  09:00 phone    390  108  WaitingPizza
+CurrentTime : 09:01:58
+	1  09:00 phone    390  118  Delivering
+CurrentTime : 09:05:18
+CurrentTime : 09:10:00
+	3  09:10 phone    280  0    WaitingToOrdered
+	2  09:10 visiting 210  0    Ordering
+CurrentTime : 09:10:05
+	3  09:10 phone    280  5    Ordering
+	2  09:10 visiting 210  5    Calculating
+CurrentTime : 09:10:08
+	3  09:10 phone    280  8    WaitingToCalculated
+	2  09:10 visiting 210  8    Calculating
+CurrentTime : 09:10:10
+	3  09:10 phone    280  10   Calculating
+	2  09:10 visiting 210  10   WaitingPizza
+CurrentTime : 09:10:15
+	2  09:10 visiting 210  15   WaitingPizza
+	3  09:10 phone    280  15   WaitingPizza
+CurrentTime : 09:11:00
+	2  09:10 visiting 210  60   WaitingPizza
+	3  09:10 phone    280  60   WaitingPizza
+CurrentTime : 09:11:05
+	2  09:10 visiting 210  65   WaitingPizza
+	3  09:10 phone    280  65   WaitingPizza
+CurrentTime : 09:11:35
+	2  09:10 visiting 210  95   WaitingPizza
+	3  09:10 phone    280  95   WaitingPizza
+CurrentTime : 09:11:45
+	2  09:10 visiting 210  105  WaitingPizza
+	3  09:10 phone    280  105  WaitingPizza
+CurrentTime : 09:11:50
+	2  09:10 visiting 210  110  WaitingPizza
+	3  09:10 phone    280  110  WaitingPizza
+CurrentTime : 09:11:55
+	2  09:10 visiting 210  115  WaitingPizza
+	3  09:10 phone    280  115  WaitingPizza
+CurrentTime : 09:12:00
+	3  09:10 phone    280  120  WaitingPizza
+CurrentTime : 09:12:05
+	3  09:10 phone    280  125  Delivering
+CurrentTime : 09:15:00
+	4  09:15 visiting 280  0    Ordering
+	3  09:10 phone    280  300  Delivering
+CurrentTime : 09:15:05
+	4  09:15 visiting 280  5    Calculating
+	3  09:10 phone    280  305  Delivering
+CurrentTime : 09:15:10
+	4  09:15 visiting 280  10   WaitingPizza
+	3  09:10 phone    280  310  Delivering
+CurrentTime : 09:15:25
+	4  09:15 visiting 280  25   WaitingPizza
+CurrentTime : 09:16:00
+	4  09:15 visiting 280  60   WaitingPizza
+CurrentTime : 09:16:30
+	4  09:15 visiting 280  90   WaitingPizza
+CurrentTime : 09:16:40
+	4  09:15 visiting 280  100  WaitingPizza
+CurrentTime : 09:16:50
+	4  09:15 visiting 280  110  WaitingPizza
+CurrentTime : 09:17:00
+CurrentTime : 09:30:00
+	5  09:30 visiting 270  0    Ordering
+CurrentTime : 09:30:05
+	5  09:30 visiting 270  5    Calculating
+CurrentTime : 09:30:10
+	5  09:30 visiting 270  10   WaitingPizza
+CurrentTime : 09:31:00
+	5  09:30 visiting 270  60   WaitingPizza
+CurrentTime : 09:31:30
+	5  09:30 visiting 270  90   WaitingPizza
+CurrentTime : 09:31:40
+	5  09:30 visiting 270  100  WaitingPizza
+CurrentTime : 09:31:50
+CurrentTime : 10:00:00
+	6  10:00 phone    100  0    Ordering
+CurrentTime : 10:00:03
+	6  10:00 phone    100  3    Calculating
+CurrentTime : 10:00:08
+	6  10:00 phone    100  8    WaitingPizza
+CurrentTime : 10:00:58
+	6  10:00 phone    100  58   WaitingPizza
+CurrentTime : 10:01:48
+	6  10:00 phone    100  108  Delivering
+CurrentTime : 10:02:00
+	7  10:02 visiting 190  0    Ordering
+	6  10:00 phone    100  120  Delivering
+CurrentTime : 10:02:05
+	7  10:02 visiting 190  5    Calculating
+	6  10:00 phone    100  125  Delivering
+CurrentTime : 10:02:10
+	7  10:02 visiting 190  10   WaitingPizza
+	6  10:00 phone    100  130  Delivering
+CurrentTime : 10:03:00
+	7  10:02 visiting 190  60   WaitingPizza
+	6  10:00 phone    100  180  Delivering
+CurrentTime : 10:03:40
+	7  10:02 visiting 190  100  WaitingPizza
+	6  10:00 phone    100  220  Delivering
+CurrentTime : 10:03:50
+	6  10:00 phone    100  230  Delivering
+CurrentTime : 10:05:08
+CurrentTime : 10:10:00
+	8  10:10 visiting 680  0    Ordering
+CurrentTime : 10:10:05
+	8  10:10 visiting 680  5    Calculating
+CurrentTime : 10:10:10
+	8  10:10 visiting 680  10   WaitingPizza
+CurrentTime : 10:11:00
+	8  10:10 visiting 680  60   WaitingPizza
+CurrentTime : 10:11:30
+	8  10:10 visiting 680  90   WaitingPizza
+CurrentTime : 10:11:50
+	8  10:10 visiting 680  110  WaitingPizza
+CurrentTime : 10:12:00
+	9  10:12 phone    100  0    Ordering
+	8  10:10 visiting 680  120  WaitingPizza
+CurrentTime : 10:12:03
+	9  10:12 phone    100  3    Calculating
+	8  10:10 visiting 680  123  WaitingPizza
+CurrentTime : 10:12:08
+	8  10:10 visiting 680  128  WaitingPizza
+	9  10:12 phone    100  8    WaitingPizza
+CurrentTime : 10:12:30
+	8  10:10 visiting 680  150  WaitingPizza
+	9  10:12 phone    100  30   WaitingPizza
+CurrentTime : 10:12:40
+	8  10:10 visiting 680  160  WaitingPizza
+	9  10:12 phone    100  40   WaitingPizza
+CurrentTime : 10:12:58
+	8  10:10 visiting 680  178  WaitingPizza
+	9  10:12 phone    100  58   WaitingPizza
+CurrentTime : 10:13:10
+	8  10:10 visiting 680  190  WaitingPizza
+	9  10:12 phone    100  70   WaitingPizza
+CurrentTime : 10:13:30
+	8  10:10 visiting 680  210  WaitingPizza
+	9  10:12 phone    100  90   WaitingPizza
+CurrentTime : 10:13:40
+	9  10:12 phone    100  100  WaitingPizza
+CurrentTime : 10:13:48
+	9  10:12 phone    100  108  Delivering
+CurrentTime : 10:14:00
+	11 10:14 visiting 110  0    WaitingToOrdered
+	12 10:14 phone    100  0    WaitingToOrdered
+	10 10:14 phone    90   0    Ordering
+	9  10:12 phone    100  120  Delivering
+CurrentTime : 10:14:03
+	12 10:14 phone    100  3    WaitingToOrdered
+	11 10:14 visiting 110  3    Ordering
+	10 10:14 phone    90   3    Calculating
+	9  10:12 phone    100  123  Delivering
+CurrentTime : 10:14:08
+	12 10:14 phone    100  8    Ordering
+	11 10:14 visiting 110  8    Calculating
+	10 10:14 phone    90   8    WaitingPizza
+	9  10:12 phone    100  128  Delivering
+CurrentTime : 10:14:11
+	12 10:14 phone    100  11   WaitingToCalculated
+	11 10:14 visiting 110  11   Calculating
+	10 10:14 phone    90   11   WaitingPizza
+	9  10:12 phone    100  131  Delivering
+CurrentTime : 10:14:13
+	12 10:14 phone    100  13   Calculating
+	10 10:14 phone    90   13   WaitingPizza
+	11 10:14 visiting 110  13   WaitingPizza
+	9  10:12 phone    100  133  Delivering
+CurrentTime : 10:14:18
+	10 10:14 phone    90   18   WaitingPizza
+	11 10:14 visiting 110  18   WaitingPizza
+	12 10:14 phone    100  18   WaitingPizza
+	9  10:12 phone    100  138  Delivering
+CurrentTime : 10:14:58
+	10 10:14 phone    90   58   WaitingPizza
+	11 10:14 visiting 110  58   WaitingPizza
+	12 10:14 phone    100  58   WaitingPizza
+	9  10:12 phone    100  178  Delivering
+CurrentTime : 10:15:03
+	10 10:14 phone    90   63   WaitingPizza
+	11 10:14 visiting 110  63   WaitingPizza
+	12 10:14 phone    100  63   WaitingPizza
+	9  10:12 phone    100  183  Delivering
+CurrentTime : 10:15:08
+	10 10:14 phone    90   68   WaitingPizza
+	11 10:14 visiting 110  68   WaitingPizza
+	12 10:14 phone    100  68   WaitingPizza
+	9  10:12 phone    100  188  Delivering
+CurrentTime : 10:15:38
+	11 10:14 visiting 110  98   WaitingPizza
+	12 10:14 phone    100  98   WaitingPizza
+	10 10:14 phone    90   98   WaitingToDelivered
+	9  10:12 phone    100  218  Delivering
+CurrentTime : 10:15:53
+	11 10:14 visiting 110  113  WaitingPizza
+	12 10:14 phone    100  113  WaitingPizza
+	10 10:14 phone    90   113  WaitingToDelivered
+	9  10:12 phone    100  233  Delivering
+CurrentTime : 10:15:58
+	11 10:14 visiting 110  118  WaitingPizza
+	10 10:14 phone    90   118  WaitingToDelivered
+	12 10:14 phone    100  118  WaitingToDelivered
+	9  10:12 phone    100  238  Delivering
+CurrentTime : 10:16:03
+	10 10:14 phone    90   123  WaitingToDelivered
+	12 10:14 phone    100  123  WaitingToDelivered
+	9  10:12 phone    100  243  Delivering
+CurrentTime : 10:17:08
+	12 10:14 phone    100  188  WaitingToDelivered
+	10 10:14 phone    90   188  Delivering
+CurrentTime : 10:20:28
+	12 10:14 phone    100  388  Delivering

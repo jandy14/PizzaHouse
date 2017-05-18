@@ -137,7 +137,7 @@ void FindNextEventTime(PizzaHouse* pPH, int pTime)
 }
 // -----------------------------------------------------------------------
 // FUNCTION OrderStart :
-//	주문 리스트에 넣은 값중 현재시각과 같은 주문은 주문큐로 이동시킨다.
+//	주문 리스트에 있는 값중 현재시각과 같은 주문은 주문큐로 이동시킨다.
 // PARAMETER USAGE :
 //	pPH : 주문리스트나 다음 목적지를 가지고 있는 PizzaHouse객체
 // -----------------------------------------------------------------------
@@ -173,12 +173,24 @@ void OrderStart(PizzaHouse* pPH)
 	}
 	return;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION ReceiveOrder :
+//	orderReceiver가 해야하는 일을 처리한다.
+//	현재 처리중인 주문이 끝났는지 확인하고 끝났으면 다음 큐(calculateQue)로 이동
+//	일이 없으면 (방금 처리한거 포함) 본인의 큐(orderQue)에서 값을 들고온다.
+//	없다면 쉰다.
+// PARAMETER USAGE :
+//	pPH : orderReceiver가 저장되어있는 PizzaHouse객체
+// -----------------------------------------------------------------------
 void ReceiveOrder(PizzaHouse* pPH)
 {
-	if(pPH->orderReceiver.progressingOrder)	//worker has job.
+	//worker has job.
+	if(pPH->orderReceiver.progressingOrder)	
 	{
 		pPH->orderReceiver.remainingTime -= pPH->elapsedTime;
-		if(pPH->orderReceiver.remainingTime == 0) //worker finish job.
+		//worker finish job.
+		if(pPH->orderReceiver.remainingTime == 0)
 		{
 			GoNextQue(pPH->orderReceiver.progressingOrder,pPH->calculateQue,pPH->scheduling);
 			RefreshWorker(&(pPH->orderReceiver));
@@ -193,7 +205,8 @@ void ReceiveOrder(PizzaHouse* pPH)
 			FindNextEventTime(pPH, pPH->orderReceiver.remainingTime);
 		}
 	}
-	if(Size(pPH->orderQue) != 0 && pPH->orderReceiver.progressingOrder == NULL) //worker remain job.
+	//worker hasn't job and remain job in Queue.
+	if(Size(pPH->orderQue) != 0 && pPH->orderReceiver.progressingOrder == NULL)
 	{
 		pPH->orderReceiver.progressingOrder = (Order*)Pop(pPH->orderQue);
 		++(pPH->orderReceiver.progressingOrder->state);
@@ -210,12 +223,24 @@ void ReceiveOrder(PizzaHouse* pPH)
 	}
 	return;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION CalculateOrder :
+//	calculator가 해야하는 일을 처리한다.
+//	현재 처리중인 주문이 끝났는지 확인하고 끝났으면 다음 큐(preparationQue)로 이동
+//	일이 없으면 (방금 처리한거 포함) 본인의 큐(calculator)에서 값을 들고온다.
+//	없다면 쉰다.
+// PARAMETER USAGE :
+//	pPH : calculator가 저장되어있는 PizzaHouse객체
+// -----------------------------------------------------------------------
 void CalculateOrder(PizzaHouse* pPH)
 {
+	//worker has job.
 	if(pPH->calculater.progressingOrder)
 	{
 		pPH->calculater.remainingTime -= pPH->elapsedTime;
-		if(pPH->calculater.remainingTime == 0) //worker finish job.
+		//worker finish job.
+		if(pPH->calculater.remainingTime == 0) 
 		{
 			GoNextQue(pPH->calculater.progressingOrder,pPH->preparationQue,pPH->scheduling);
 			RefreshWorker(&(pPH->calculater));
@@ -230,6 +255,7 @@ void CalculateOrder(PizzaHouse* pPH)
 			FindNextEventTime(pPH, pPH->calculater.remainingTime);
 		}
 	}
+	//worker hasn't job and remain job in Queue.
 	if(Size(pPH->calculateQue) != 0 && pPH->calculater.progressingOrder == NULL)
 	{
 		pPH->calculater.progressingOrder = (Order*)Pop(pPH->calculateQue);
@@ -239,25 +265,40 @@ void CalculateOrder(PizzaHouse* pPH)
 	}
 	return;
 }
+// -----------------------------------------------------------------------
+// FUNCTION MakePizza :
+//	pizzaMaker가 해야하는 일을 처리한다.
+//	
+// PARAMETER USAGE :
+//	pPH : pizzaMaker가 저장되어있는 PizzaHouse객체
+// -----------------------------------------------------------------------
 void MakePizza(PizzaHouse* pPH)
 {
+	//When RR, pizza should be assigned to the pizzaMaker
 	if(pPH->scheduling == RR)
 		DistributeWork(pPH);
-	//printf("Go\n");
+
 	int i;
+	//pizzaMaker loop
 	for(i = 0; i < PIZZA_MAKER_AMOUNT; i++)
 	{
+		//pizzaMaker has job.
 		if(pPH->pizzaMaker[i].progressingPizza)
 		{
+			//pizza가 완성까지 남은 시간
 			pPH->pizzaMaker[i].progressingPizza->remainingTime -= pPH->elapsedTime;
+			//pizzaMaker가 다음일을 할때까지 남은 시간(RR일때는 값이 다를수 있다)
 			pPH->pizzaMaker[i].remainingTime -= pPH->elapsedTime;
 
+			//pizzaMaker가 다음일을 해야할 시간이 되었다.
 			if(pPH->pizzaMaker[i].remainingTime == 0)
 			{
+				//pizza가 완성된 것이라면
 				if(pPH->pizzaMaker[i].progressingPizza->remainingTime == 0)
 				{
 					RefreshPizzaMaker(&(pPH->pizzaMaker[i]),0);
 				}
+				//pizza가 완성된 것이 아니라면
 				else
 				{
 					Insert(pPH->pizzaMaker[i].workQue,(void*)pPH->pizzaMaker[i].progressingPizza,Size(pPH->pizzaMaker[i].workQue));
@@ -267,19 +308,25 @@ void MakePizza(PizzaHouse* pPH)
 			else
 				FindNextEventTime(pPH, pPH->pizzaMaker[i].remainingTime);
 		}
+		//When RR
 		if(pPH->scheduling == RR)
 		{
+			//pizzaMaker doesn't need or Queue doesn't remain next job.
 			if(Size(pPH->pizzaMaker[i].workQue) == 0 || pPH->pizzaMaker[i].progressingPizza != NULL)
 				continue;
+			//if pizzaMaker need next job and remain next job.
 			pPH->pizzaMaker[i].progressingPizza = (Pizza*)Pop(pPH->pizzaMaker[i].workQue);
+			//Set pizzaMaker's remainingTime that maximun is quantum value.
 			if(pPH->quantum > pPH->pizzaMaker[i].progressingPizza->remainingTime)
 				pPH->pizzaMaker[i].remainingTime = pPH->pizzaMaker[i].progressingPizza->remainingTime;
 			else
 				pPH->pizzaMaker[i].remainingTime = pPH->quantum;
 			FindNextEventTime(pPH, pPH->pizzaMaker[i].remainingTime);
 		}
+		//When FCFS, SJF
 		else
 		{
+			//worker hasn't job and remain job in Queue.
 			if(pPH->pizzaMaker[i].progressingPizza == NULL)
 			{
 				if(Size(pPH->makingPizzaQue) == 0)
@@ -297,9 +344,17 @@ void MakePizza(PizzaHouse* pPH)
 	}
 	return;
 }
+// -----------------------------------------------------------------------
+// FUNCTION DistributeWork :
+//	pizza를 pizzaMaker에게 골고루 나눠준다.
+//	
+// PARAMETER USAGE :
+//	pPH : preparationQue와 pizzaMaker가 저장된 PizzaHouse객체
+// -----------------------------------------------------------------------
 void DistributeWork(PizzaHouse* pPH)
 {
 	static int index = 0;
+	//모든 preparationQue에 있는 주문들의 피자를 makingPizzaQue에 넣는다.
 	while(1)
 	{
 		Order* item;
@@ -308,6 +363,7 @@ void DistributeWork(PizzaHouse* pPH)
 		ReadyPizza(item, pPH->makingPizzaQue, pPH->waitingPizzaQue);
 	}
 
+	//모든 makingPizzaQue에 있는 pizza를 pizzaMaker에게 순차적으로 나누어 준다.
 	while(1)
 	{
 		Pizza* item = (Pizza*)Pop(pPH->makingPizzaQue);
@@ -320,6 +376,16 @@ void DistributeWork(PizzaHouse* pPH)
 	}
 	return;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION ReadyPizza :
+//	주문을 받아 pizza를 pizzaList에 넣고 주문은 pNextQue에 넣어준다.
+//	
+// PARAMETER USAGE :
+//	pOrder : 처리할 주문
+//	pPizzaList : 주문에서 나온 피자를 넣을 큐
+//	pNextQue : 처리한 주문을 보내줄 큐
+// -----------------------------------------------------------------------
 void ReadyPizza(Order* pOrder, List* pPizzaList ,List* pNextQue)
 {
 	int i;
@@ -328,15 +394,32 @@ void ReadyPizza(Order* pOrder, List* pPizzaList ,List* pNextQue)
 	GoNextQue(pOrder, pNextQue, FCFS);
 	return;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION PrintOrder :
+//	주문을 출력해주는 함수
+//	포맷은 number arrivalTime orderType serviceTime turnaroundTime
+//	주문이 NULL이면 num을 초기화한다.
+// PARAMETER USAGE :
+//	pOrder : 처리할 주문
+//	pCurrentTime : 현재시각
+//	pOutput : 출력할 스트림 NULL이면 stdout
+//	pIsTest : 완성전 테스트용 출력인지
+// -----------------------------------------------------------------------
 void PrintOrder(Order* pOrder, int pCurrentTime, FILE* pOutput, int pIsTest)
 {
 	static int num = 1;
 
+	//num 초기화
 	if(pOrder == NULL)
 	{
 		num = 1;
 		return;
 	}
+	//pOutput default set
+	if(pOutput == NULL)
+		pOutput = stdout;
+
 
 	if(pIsTest)
 	{
@@ -397,17 +480,27 @@ void PrintOrder(Order* pOrder, int pCurrentTime, FILE* pOutput, int pIsTest)
 	fprintf(pOutput, "\n");
 	return;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION CheckCompletedOrder :
+//	waitingPizzaQue에 저장된 주문중 모든 피자가 완성된 경우
+//	주문의 타입을 기준으로 다음 행동을 한다.
+// PARAMETER USAGE :
+//	pPH : 처리할 데이터가 들어있는 PizzaHouse객체
+// -----------------------------------------------------------------------
 void CheckCompletedOrder(PizzaHouse* pPH)
 {
 	int listSize = Size(pPH->waitingPizzaQue);
 	int i,j;
 
+	//리스트의 모든 주문 확인
 	for(i = 0; i < listSize; ++i)
 	{
 		int isAllComplete = 1;
-		//Order* order = (Order*)ObserveItem(pPH->waitingPizzaQue,i);
+		//주문을 하나 꺼낸다
 		Order* order = (Order*)Pop(pPH->waitingPizzaQue);
 		int pizzaListSize = Size(order->pizzaList);
+		//모든 피자가 완성됐는지 확인
 		for(j = 0; j < pizzaListSize; ++j)
 		{
 			Pizza* pizza = (Pizza*)ObserveItem(order->pizzaList,j);
@@ -417,8 +510,10 @@ void CheckCompletedOrder(PizzaHouse* pPH)
 				break;
 			}
 		}
+		//모두 완성이라면
 		if(isAllComplete)
 		{
+			//방문고객이면 완료
 			if(order->type == VISIT)
 			{
 				order->state = Complete;
@@ -426,18 +521,37 @@ void CheckCompletedOrder(PizzaHouse* pPH)
 				FreeOrderMemory(order);
 				++(pPH->completeCount);
 			}
+			//phone이면 deliveryQue로
 			else
 				GoNextQue(order, pPH->deliveryQue, FCFS);
 		}
+		//모두 완성이 아니면 다시 waitingPizzaQue에 다시 넣어줌
 		else
 			Insert(pPH->waitingPizzaQue,(void*)order,Size(pPH->waitingPizzaQue));
 	}
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION FreeOrderMemory :
+//	Order객체에 할달된 메모리 해제
+// PARAMETER USAGE :
+//	pOrder : 할당을 풀어줄 Order객체
+// -----------------------------------------------------------------------
 void FreeOrderMemory(Order* pOrder)
 {
 	DeleteList(pOrder->pizzaList);
 	free(pOrder);
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION Delivery :
+//	deliveryStaff가 해야하는 일을 처리한다.
+//	현재 처리중인 주문이 끝났는지 확인하고 끝났으면 출력!
+//	일이 없으면 (방금 처리한거 포함) 본인의 큐(orderQue)에서 값을 들고온다.
+//	없다면 쉰다.
+// PARAMETER USAGE :
+//	pPH : deliveryStaff가 저장되어있는 PizzaHouse객체
+// -----------------------------------------------------------------------
 void Delivery(PizzaHouse* pPH)
 {
 	if(pPH->deliveryStaff.progressingOrder)
@@ -469,8 +583,15 @@ void Delivery(PizzaHouse* pPH)
 		FindNextEventTime(pPH, DELIVERY_TIME);
 	}
 }
+// -----------------------------------------------------------------------
+// FUNCTION PizzaHouseRun :
+//	pizzaHouse의 현재시각 이벤트를 처리하고 다음 이벤트 시각을 찾습니다.
+// PARAMETER USAGE :
+//	pPH : 이벤트를 진행할 PizzaHouse
+// -----------------------------------------------------------------------
 BOOL PizzaHouseRun(PizzaHouse* pPH)
 {
+	//현재시각 갱신
 	if(pPH->nextEventTime == -1)
 		pPH->elapsedTime = 0;
 	else
@@ -478,19 +599,39 @@ BOOL PizzaHouseRun(PizzaHouse* pPH)
 	pPH->currentTime += pPH->elapsedTime;
 	pPH->nextEventTime = -1;
 
+	//현재시각에 맞는 주문이 있으면 처리
 	OrderStart(pPH);
+	//orderReceiver's Work
 	ReceiveOrder(pPH);
+	//calculator's Work
 	CalculateOrder(pPH);
+	//pizzaMaker's Work
 	MakePizza(pPH);
+	//check completed order and do next job
 	CheckCompletedOrder(pPH);
+	//deliveryStaff's Work
 	Delivery(pPH);
 
 	return !(IsAllOrderClear(pPH));
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION IsAllOrderClear :
+//	모든 주문이 완성됐는지 확인하고 반환
+// PARAMETER USAGE :
+//	pPH : 확인이 필요한 PizzaHouse 객체
+// -----------------------------------------------------------------------
 BOOL IsAllOrderClear(PizzaHouse* pPH)
 {
 	return pPH->orderCount == pPH->completeCount? TRUE:FALSE;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION PizzaHouseClose :
+//	pizzaHouse 정리 (메모리 해제)
+// PARAMETER USAGE :
+//	pPH : 정리하려는 PizzaHouse 객체
+// -----------------------------------------------------------------------
 void PizzaHouseClose(PizzaHouse* pPH)
 {
 	int i;
@@ -510,6 +651,14 @@ void PizzaHouseClose(PizzaHouse* pPH)
 
 	return;
 }
+
+// -----------------------------------------------------------------------
+// FUNCTION PizzaHouseNowState :
+//	pizzaHouse의 현재 상태에 대해 출력해주는 함수
+// PARAMETER USAGE :
+//	pPH : 상태를 확인하고 싶은 pizzaHouse
+//	pDebugFile : 출력 스트림
+// -----------------------------------------------------------------------
 void PizzaHouseNowState(PizzaHouse* pPH, FILE* pDebugFile)
 {
 	int i;
